@@ -1,0 +1,43 @@
+{
+  "name": "wander-cli",
+  "version": "1.0.0",
+  "description": "Database Migrations for Modern Apps",
+  "main": "dist/index.js",
+  "bin": {
+    "wander": "./bin/wander.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dividedbyzeroco/wander-cli.git"
+  },
+  "keywords": [
+    "migration",
+    "database",
+    "db"
+  ],
+  "author": "Jake Josol",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dividedbyzeroco/wander-cli/issues"
+  },
+  "homepage": "https://github.com/dividedbyzeroco/wander-js#readme",
+  "dependencies": {
+    "@types/common-tags": "^1.4.0",
+    "@types/glob": "^5.0.35",
+    "@types/mysql": "^2.15.4",
+    "@types/node": "^9.6.4",
+    "chalk": "^2.3.2",
+    "commander": "^2.15.1",
+    "common-tags": "^1.7.2",
+    "cwd": "^0.10.0",
+    "enforce-js": "^1.2.6",
+    "glob": "^7.1.2",
+    "mysql": "^2.15.0",
+    "parse-url": "^3.0.2",
+    "promptly": "^3.0.3",
+    "rimraf": "^2.6.2"
+  }
+}
