@@ -76,7 +76,10 @@ exports.getLatestMigrations = function (dir, count) {
     var filenames = glob_1.default.sync(path_1.default.join(dir, '/v*_*_*__*.js'));
     filenames = filenames.filter(function (filename) {
         return latestMigrations.includes(parsers_1.extractVersion(dir, filename).standard);
-    });
+    })
+        .slice()
+        .reverse()
+        .slice();
     for (var _i = 0, filenames_2 = filenames; _i < filenames_2.length; _i++) {
         var filename = filenames_2[_i];
         var migration = require(cwd_1.default(filename));

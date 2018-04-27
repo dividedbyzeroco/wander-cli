@@ -77,9 +77,12 @@ export const getLatestMigrations = (dir: string, count?: number) => {
     const latestMigrations = history.committed.slice().reverse().slice(0, migrationCount);
     let filenames = glob.sync(path.join(dir,'/v*_*_*__*.js'));
 
-    filenames = filenames.slice().reverse().filter(filename => {
+    filenames = filenames.filter(filename => {
         return latestMigrations.includes(extractVersion(dir, filename).standard);
-    });
+    })
+    .slice()
+    .reverse()
+    .slice();
 
     for(let filename of filenames) {
         const migration = require(cwd(filename));
