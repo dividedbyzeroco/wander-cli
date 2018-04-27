@@ -7,7 +7,9 @@
     "wander": "./bin/wander.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "clean": "node ./node_modules/rimraf/bin dist",
+    "prepublish": "npm run clean && npm run build"
   },
   "repository": {
     "type": "git",
@@ -34,10 +36,12 @@
     "common-tags": "^1.7.2",
     "cwd": "^0.10.0",
     "enforce-js": "^1.2.6",
+    "eslint": "^4.19.1",
     "glob": "^7.1.2",
     "mysql": "^2.15.0",
     "parse-url": "^3.0.2",
     "promptly": "^3.0.3",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "typescript": "^2.8.3"
   }
 }
