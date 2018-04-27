@@ -23,9 +23,9 @@
   "author": "Jake Josol",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jakejosol/wander-cli/issues"
+    "url": "https://github.com/dividedbyzeroco/wander-cli/issues"
   },
-  "homepage": "https://github.com/jakejosol/wander-js#readme",
+  "homepage": "https://github.com/dividedbyzeroco/wander-js#readme",
   "dependencies": {
     "@types/common-tags": "^1.4.0",
     "@types/glob": "^5.0.35",
