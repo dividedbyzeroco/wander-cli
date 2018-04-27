@@ -145,7 +145,7 @@ exports.default = (function () {
         .command('commit')
         .description('commit pending migrations')
         .action(function () { return __awaiter(_this, void 0, void 0, function () {
-        var history, currentVersion, committed, config, environment, databaseConfig, migrations, database, _i, migrations_1, migration, transaction, create, alter, drop, seed, clear, execute, error_1;
+        var history, currentVersion, committed, config, environment, databaseConfig, migrations, database, _i, migrations_1, migration, transaction, create, alter, drop, seed, truncate, execute, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -184,9 +184,9 @@ exports.default = (function () {
                     currentVersion = migration.version();
                     console.log(chalk_1.default.blue("[INFO] Committing migration " + chalk_1.default.yellow(migration.version()) + "..."));
                     transaction = new database.Transaction();
-                    create = transaction.create, alter = transaction.alter, drop = transaction.drop, seed = transaction.seed, clear = transaction.clear, execute = transaction.execute;
+                    create = transaction.create, alter = transaction.alter, drop = transaction.drop, seed = transaction.seed, truncate = transaction.truncate, execute = transaction.execute;
                     // Prepare transaction
-                    return [4 /*yield*/, migration.up({ create: create, alter: alter, drop: drop, seed: seed, clear: clear, execute: execute })];
+                    return [4 /*yield*/, migration.up({ create: create, alter: alter, drop: drop, seed: seed, truncate: truncate, execute: execute })];
                 case 3:
                     // Prepare transaction
                     _a.sent();
@@ -240,7 +240,7 @@ exports.default = (function () {
         .description('revert the most recent migration')
         .option('-c, --count [count]', 'number of migrations to revert')
         .action(function (cmd) { return __awaiter(_this, void 0, void 0, function () {
-        var history, currentVersion, config, environment, databaseConfig, migrations, database, _i, migrations_2, migration, transaction, create, alter, drop, seed, clear, execute, error_2;
+        var history, currentVersion, config, environment, databaseConfig, migrations, database, _i, migrations_2, migration, transaction, create, alter, drop, seed, truncate, execute, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -278,9 +278,9 @@ exports.default = (function () {
                     currentVersion = migration.version();
                     console.log(chalk_1.default.blue("[INFO] Reverting migration " + chalk_1.default.yellow(migration.version()) + "..."));
                     transaction = new database.Transaction();
-                    create = transaction.create, alter = transaction.alter, drop = transaction.drop, seed = transaction.seed, clear = transaction.clear, execute = transaction.execute;
+                    create = transaction.create, alter = transaction.alter, drop = transaction.drop, seed = transaction.seed, truncate = transaction.truncate, execute = transaction.execute;
                     // Prepare transaction
-                    return [4 /*yield*/, migration.down({ create: create, alter: alter, drop: drop, seed: seed, clear: clear, execute: execute })];
+                    return [4 /*yield*/, migration.down({ create: create, alter: alter, drop: drop, seed: seed, truncate: truncate, execute: execute })];
                 case 3:
                     // Prepare transaction
                     _a.sent();
@@ -333,7 +333,7 @@ exports.default = (function () {
         .command('reset')
         .description('reset the all migrations')
         .action(function (cmd) { return __awaiter(_this, void 0, void 0, function () {
-        var history, currentVersion, config, environment, databaseConfig, migrations, database, _i, migrations_3, migration, transaction, create, alter, drop, seed, clear, execute, error_3;
+        var history, currentVersion, config, environment, databaseConfig, migrations, database, _i, migrations_3, migration, transaction, create, alter, drop, seed, truncate, execute, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -371,9 +371,9 @@ exports.default = (function () {
                     currentVersion = migration.version();
                     console.log(chalk_1.default.blue("[INFO] Reverting migration " + chalk_1.default.yellow(migration.version()) + "..."));
                     transaction = new database.Transaction();
-                    create = transaction.create, alter = transaction.alter, drop = transaction.drop, seed = transaction.seed, clear = transaction.clear, execute = transaction.execute;
+                    create = transaction.create, alter = transaction.alter, drop = transaction.drop, seed = transaction.seed, truncate = transaction.truncate, execute = transaction.execute;
                     // Prepare transaction
-                    return [4 /*yield*/, migration.down({ create: create, alter: alter, drop: drop, seed: seed, clear: clear, execute: execute })];
+                    return [4 /*yield*/, migration.down({ create: create, alter: alter, drop: drop, seed: seed, truncate: truncate, execute: execute })];
                 case 3:
                     // Prepare transaction
                     _a.sent();

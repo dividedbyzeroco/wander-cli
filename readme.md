@@ -112,8 +112,8 @@ module.exports = {
             { caption: 'Another post!' }
         ]);
     },
-    async down({ drop, clear }) {
-        clear('post');
+    async down({ drop, truncate }) {
+        truncate('post');
         drop('post');
     }
 };
@@ -210,7 +210,7 @@ seed('post', [
 ]);
 ```
 
-## clear
+## truncate
 
 __Parameters__
 
@@ -225,7 +225,7 @@ __Description__
 __Example__
 
 ```javascript
-clear('comment');
+truncate('comment');
 ```
 
 ## execute
@@ -409,7 +409,7 @@ The purpose of the `up` method is to commit the changes you want to apply to the
 
 The reason why this practice is observed is that it allows you, to some extent, to recover from a breaking change that was executed accidentally. Also, it allows you to ensure consistency when changing between database versions.
 
-Do note, however, that unless a `seed` option is defined inside the methods, any data that was __cleared__ or __dropped__ will be __lost__ forever.
+Do note, however, that unless a `seed` option is defined inside the methods, any data that was __truncated__ or __dropped__ will be __lost__ forever.
 
 # Transactions
 

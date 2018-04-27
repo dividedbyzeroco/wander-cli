@@ -88,12 +88,12 @@ export default class MySQLDatabaseAdapter implements IDatabaseAdapter {
             this._scripts.push(statement.toString());
         };
 
-        clear = (tableName: string) => {
+        truncate = (tableName: string) => {
             // Enforce
             enforce`${{ tableName }} as a string`;
 
             // Prepare statement
-            const statement = new ClearStatement(tableName, Client);
+            const statement = new TruncateStatement(tableName, Client);
 
             // Add the statement
             this._scripts.push(statement.toString());
@@ -358,7 +358,7 @@ class SeedStatement {
     }
 }
 
-class ClearStatement {
+class TruncateStatement {
 
     _table: Table;
     _client: typeof Client;

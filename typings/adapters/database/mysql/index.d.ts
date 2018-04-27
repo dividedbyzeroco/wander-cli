@@ -21,7 +21,7 @@ export default class MySQLDatabaseAdapter implements IDatabaseAdapter {
             seed: (tableName: string, seeds: {
                 [key: string]: any;
             }[]) => void;
-            clear: (tableName: string) => void;
+            truncate: (tableName: string) => void;
             execute: (query: string) => void;
             escape: (value: string) => string;
             escapeKey: (key: string) => string;

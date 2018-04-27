@@ -10,7 +10,7 @@ export interface ITransaction {
     create: (tableName: string, definition: TableDefinition) => void;
     alter: (tableName: string, definition: TableDefinition) => void;
     drop: (tableName: string) => void;
-    clear: (tableName: string) => void;
+    truncate: (tableName: string) => void;
     seed: (tableName: string, data: SeedData) => void;
     execute: (statement: string) => void;
     escape: (value: string) => string;

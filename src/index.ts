@@ -163,10 +163,10 @@ export default () => {
 
                     // Prepare transaction
                     const transaction = new database.Transaction();
-                    const { create, alter, drop, seed, clear, execute } = transaction;
+                    const { create, alter, drop, seed, truncate, execute } = transaction;
 
                     // Prepare transaction
-                    await migration.up({ create, alter, drop, seed, clear, execute });
+                    await migration.up({ create, alter, drop, seed, truncate, execute });
                     transaction.commit();
 
                     // Show transaction
@@ -258,10 +258,10 @@ export default () => {
 
                     // Prepare transaction
                     const transaction = new database.Transaction();
-                    const { create, alter, drop, seed, clear, execute } = transaction;
+                    const { create, alter, drop, seed, truncate, execute } = transaction;
 
                     // Prepare transaction
-                    await migration.down({ create, alter, drop, seed, clear, execute });
+                    await migration.down({ create, alter, drop, seed, truncate, execute });
                     transaction.commit();
 
                     // Show transaction
@@ -351,10 +351,10 @@ export default () => {
 
                     // Prepare transaction
                     const transaction = new database.Transaction();
-                    const { create, alter, drop, seed, clear, execute } = transaction;
+                    const { create, alter, drop, seed, truncate, execute } = transaction;
 
                     // Prepare transaction
-                    await migration.down({ create, alter, drop, seed, clear, execute });
+                    await migration.down({ create, alter, drop, seed, truncate, execute });
                     transaction.commit();
 
                     // Show transaction

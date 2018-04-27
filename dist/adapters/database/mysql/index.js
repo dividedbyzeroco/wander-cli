@@ -99,11 +99,11 @@ var MySQLDatabaseAdapter = /** @class */ (function () {
                     // Add the statement
                     _this._scripts.push(statement.toString());
                 };
-                this.clear = function (tableName) {
+                this.truncate = function (tableName) {
                     // Enforce
                     enforce_js_1.default(templateObject_8 || (templateObject_8 = __makeTemplateObject(["", " as a string"], ["", " as a string"])), { tableName: tableName });
                     // Prepare statement
-                    var statement = new ClearStatement(tableName, client_1.default);
+                    var statement = new TruncateStatement(tableName, client_1.default);
                     // Add the statement
                     _this._scripts.push(statement.toString());
                 };
@@ -340,22 +340,22 @@ var SeedStatement = /** @class */ (function () {
     };
     return SeedStatement;
 }());
-var ClearStatement = /** @class */ (function () {
-    function ClearStatement(tableName, client) {
+var TruncateStatement = /** @class */ (function () {
+    function TruncateStatement(tableName, client) {
         this._table = new table_1.default(tableName);
         this._client = client;
     }
-    Object.defineProperty(ClearStatement.prototype, "table", {
+    Object.defineProperty(TruncateStatement.prototype, "table", {
         get: function () {
             return this._table;
         },
         enumerable: true,
         configurable: true
     });
-    ClearStatement.prototype.toString = function () {
+    TruncateStatement.prototype.toString = function () {
         return common_tags_1.stripIndents(templateObject_20 || (templateObject_20 = __makeTemplateObject(["\n            TRUNCATE TABLE ", ";\n        "], ["\n            TRUNCATE TABLE ", ";\n        "])), this._client.escapeKey(this.table._tableName));
     };
-    return ClearStatement;
+    return TruncateStatement;
 }());
 var ExecuteStatement = /** @class */ (function () {
     function ExecuteStatement(query) {
