@@ -1,6 +1,6 @@
 # Wander
 
-Migrations for modern web apps
+Database Migrations for Modern Apps
 
 # Introduction
 
