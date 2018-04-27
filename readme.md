@@ -6,6 +6,15 @@ Migrations for modern web apps
 
 __Wander__ is a command-line tool that enables programmable database changes. Through __Migrations__, you can version control your database and easily `commit` or `revert` changes between versions.
 
+# Supported Database
+
+Currently, only `mysql` is supported. Adapters for other databases are still under development.
+
++ &check; MySQL
++ &cross; PostgreSQL
++ &cross; SQL Server
++ &cross; Oracle DB
+
 # Getting Started
 
 To get started, globally install `wander-cli`
@@ -79,9 +88,7 @@ __Description__
 + The `up` method runs whenever the migration is committed
 + The `down` method runs whenever the migration is reverted
 
-For the `up` and `down` methods, a [MigrationOptions](#migration-options) object is passed to them for your usage.
-
-For most of the migration, you will be using these `Migration Options` as your basis for making changes to the database.
+For the `up` and `down` methods, an object is passed to them for your usage, which includes serveral useful functions. Check the [API](#api) section for more information.
 
 __Example__
 
@@ -114,8 +121,7 @@ module.exports = {
 
 # API
 
-# `Migration Options` object
-## create(`tableName`: string, `definition`: function)
+## create
 
 __Parameters__
 
@@ -126,7 +132,7 @@ __Parameters__
 
 __Description__
 
-+ Accepts a `tableName` that you want to create, and a definition function.
++ Accepts a __tableName__ that you want to create, and a definition function.
 + The definition function has a [Table](#table) parameter that allows you to define the structure of your table.
 
 __Example__
@@ -139,7 +145,7 @@ create('post', table => {
 });
 ```
 
-## alter(`tableName`: string, `definition`: function)
+## alter
 
 __Parameters__
 
@@ -150,7 +156,7 @@ __Parameters__
 
 __Description__
 
-+ Accepts a `tableName` that you want to alter, and a definition function.
++ Accepts a __tableName__ that you want to alter, and a definition function.
 + The definition function has a [Table](#table-class) parameter that allows you to define the structure of your table.
 
 __Example__
@@ -161,7 +167,7 @@ alter('comment', table => {
 });
 ```
 
-## drop(`tableName`: string)
+## drop
 
 __Parameters__
 
@@ -171,7 +177,7 @@ __Parameters__
 
 __Description__
 
-+ Accepts a `tableName` that you want to drop.
++ Accepts a __tableName__ that you want to drop.
 
 __Example__
 
@@ -179,7 +185,7 @@ __Example__
 drop('comment');
 ```
 
-## seed(`tableName`: string, `seeds`: object[])
+## seed
 
 __Parameters__
 
@@ -190,10 +196,10 @@ __Parameters__
 
 __Description__
 
-+ Accepts a `tableName` that you want to seed with data.
-+ Accepts a `seeds` array of objects defining the data you want to insert.
++ Accepts a __tableName__ that you want to seed with data.
++ Accepts a __seeds__ array of objects defining the data you want to insert.
 
-> __NOTE:__ Only the columns of the first item in the list define the columns that will be populated.
+> __NOTE:__ Only the columns of the first item in the list will define the columns that will be populated for all of the items.
 
 __Example__
 
@@ -204,7 +210,7 @@ seed('post', [
 ]);
 ```
 
-## clear(`tableName`: string)
+## clear
 
 __Parameters__
 
@@ -214,7 +220,7 @@ __Parameters__
 
 __Description__
 
-+ Accepts a `tableName` that you want to truncate.
++ Accepts a __tableName__ that you want to truncate.
 
 __Example__
 
@@ -222,7 +228,7 @@ __Example__
 clear('comment');
 ```
 
-## execute(`query`: string)
+## execute
 
 __Parameters__
 
@@ -233,7 +239,7 @@ __Parameters__
 __Description__
 
 + Ideal for running scripts that are too complex or are too specific to the database you are running.
-+ Accepts a `query` that you want to execute.
++ Accepts a __query__ that you want to execute.
 
 > WARNING: Running execute is very dangerous especially if the keys and values you are trying to use are not properly escaped.
 
@@ -247,7 +253,7 @@ execute(`
 ```
 
 
-# `Table` class
+# __Table__ class
 
 __Description__
 
@@ -315,7 +321,11 @@ module.exports = {
         return '1.0.0';
     },
     description() {
-        return `Create post`;
+        return `
+            Created the post table.
+            Changed the comment table.
+            Populated the post table.
+        `;
     },
     async up({ create, alter, seed, execute }) {
         create('post', table => {
@@ -329,13 +339,13 @@ module.exports = {
         // Equivalent to the following
         `
         CREATE TABLE post (
-            id int PRIMARY KEY AUTO_INCREMENT,
-            caption varchar(500),
-            user_id int(11),
-            info json,
-            identifier varchar(30),
-            INDEX IDENT (identifier)
-        );
+        id int AUTO_INCREMENT,
+        caption varchar(500),
+        user_id int(11),
+        info json,
+        identifier varchar(30),
+        PRIMARY KEY (id),
+        INDEX IDENT (identifier));
         `
 
         alter('comment', table => {
@@ -395,14 +405,14 @@ module.exports = {
 
 In terms of the `Migrations` standard for databases, the convention is to always have `up` and `down` methods. 
 
-The purpose of the `up` method is to commit the changes you want to apply for the database. Conversely, it is required that you undo everything that you performed in the `up` method inside the `down` method.
+The purpose of the `up` method is to commit the changes you want to apply to the database. Conversely, it is required that you undo everything that you performed, inside the `down` method.
 
-The reason why this practice is maintained is that it allows you, to some extent, recover from a breaking change that was executed accidentally. Also, it allows you to ensure consistency when changing between database versions.
+The reason why this practice is observed is that it allows you, to some extent, to recover from a breaking change that was executed accidentally. Also, it allows you to ensure consistency when changing between database versions.
 
 Do note, however, that unless a `seed` option is defined inside the methods, any data that was __cleared__ or __dropped__ will be __lost__ forever.
 
 # Transactions
 
-For `wander`, all migrations are executed as a single transaction. That means the MigrationOptions you used will not be fired until the processor has gone through all of them. 
+For `wander`, all migrations are executed as a single transaction. That means the [MigrationOptions](#migrationoptions-object) you used will not be fired until the processor has gone through all of them. 
 
-That also means that if anything goes wrong, the scripts will be rolled back (except for cases where database auto-commits occur. See the corresponding manuals of your databases for more information).
+That also means that if anything goes wrong, the scripts will be rolled back (except for cases where database auto-commits occur). See the corresponding manuals of your databases for more information.
