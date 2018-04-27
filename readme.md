@@ -280,7 +280,7 @@ __Methods__
     - `via`, by default, is `tableName`_`id`
 + date(`columnName`: string)
     - Adds a date column
-+ dateTime(`columnName`: string)
++ datetime(`columnName`: string)
     - Adds a datetime column
 + boolean(`columnName`: string)
     - Adds a boolean column (e.g. on MySQL this is equivalent to `bit`)
