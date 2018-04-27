@@ -6,7 +6,7 @@ Migrations for modern web apps
 
 __Wander__ is a command-line tool that enables programmable database changes. Through __Migrations__, you can version control your database and easily `commit` or `revert` changes between versions.
 
-# Supported Database
+# Supported Databases
 
 Currently, only `mysql` is supported. Adapters for other databases are still under development.
 
