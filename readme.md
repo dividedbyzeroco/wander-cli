@@ -329,11 +329,13 @@ module.exports = {
     },
     async up({ create, alter, seed, execute }) {
         create('post', table => {
+            table.id();
             table.string('caption', 500);
             table.pointer('user');
             table.json('info');
             table.string('identifier');
             table.index('identifier', 'IDENT');
+            table.timestamps();
         });
 
         // Equivalent to the following
