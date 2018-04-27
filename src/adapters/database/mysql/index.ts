@@ -177,7 +177,7 @@ class CreateStatement {
         return this.table._indexes.length > 0? stripIndents`,
             ${this.table._indexes
                 .filter(index => index.action === 'ADD')
-                .map(index => `INDEX (${this._client.escapeKey(index.name)})`).join(',\n')}
+                .map(index => `INDEX ${this._client.escapeKey(index.alias)} (${this._client.escapeKey(index.name)})`).join(',\n')}
         ` : '';
     }
 
@@ -185,7 +185,7 @@ class CreateStatement {
         return this.table._uniques.length > 0? stripIndents`,
             ${this.table._uniques
                 .filter(unique => unique.action === 'ADD')
-                .map(unique => `CONSTRAINT ${this._client.escapeKey(unique.name)} UNIQUE (${this._client.escapeKey(unique.name)})`)
+                .map(unique => `CONSTRAINT ${this._client.escapeKey(unique.alias)} UNIQUE (${this._client.escapeKey(unique.name)})`)
                 .join('\n')
             }
         ` : '';
@@ -252,7 +252,10 @@ class AlterStatement {
     _getIndexes() {
         return this.table._indexes.length > 0? stripIndents`,
             ${this.table._indexes.map(index => {
-                return `${index.action} INDEX (${this._client.escapeKey(index.name)})`;
+                if(index.action === 'ADD')
+                    return `ADD INDEX ${this._client.escapeKey(index.alias)} (${this._client.escapeKey(index.name)})`;
+                else
+                    return `DROP INDEX ${this._client.escapeKey(index.alias)}`;
             }).join(',\n')}
         ` : '';
     }
@@ -261,9 +264,9 @@ class AlterStatement {
         return this.table._uniques.length > 0? stripIndents`,
             ${this.table._uniques.map(unique => {
                 if(unique.action === 'ADD')
-                    return `ADD CONSTRAINT ${this._client.escapeKey(unique.name)} UNIQUE (${this._client.escapeKey(unique.name)})`;
+                    return `ADD CONSTRAINT ${this._client.escapeKey(unique.alias)} UNIQUE (${this._client.escapeKey(unique.name)})`;
                 else
-                    return `DROP INDEX ${this._client.escapeKey(unique.name)}`;
+                    return `DROP INDEX ${this._client.escapeKey(unique.alias)}`;
             }).join(',\n')}
         ` : '';
     }

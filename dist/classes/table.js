@@ -103,13 +103,15 @@ var Table = /** @class */ (function () {
         this._primary = primary;
         return primary;
     };
-    Table.prototype.index = function (key) {
-        var index = new index_definition_1.default(key);
+    Table.prototype.index = function (key, alias) {
+        if (alias === void 0) { alias = key; }
+        var index = new index_definition_1.default(key, alias);
         this._indexes.push(index);
         return index;
     };
-    Table.prototype.unique = function (key) {
-        var unique = new unique_definition_1.default(key);
+    Table.prototype.unique = function (key, alias) {
+        if (alias === void 0) { alias = key; }
+        var unique = new unique_definition_1.default(key, alias);
         this._uniques.push(unique);
         return unique;
     };

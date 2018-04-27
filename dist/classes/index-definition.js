@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var IndexDefinition = /** @class */ (function () {
-    function IndexDefinition(key) {
+    function IndexDefinition(key, alias) {
         this._action = 'ADD';
         this._name = key;
+        this._alias = alias;
     }
     IndexDefinition.prototype.add = function () {
         this._action = 'ADD';
@@ -14,6 +15,13 @@ var IndexDefinition = /** @class */ (function () {
     Object.defineProperty(IndexDefinition.prototype, "name", {
         get: function () {
             return this._name;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(IndexDefinition.prototype, "alias", {
+        get: function () {
+            return this._alias;
         },
         enumerable: true,
         configurable: true

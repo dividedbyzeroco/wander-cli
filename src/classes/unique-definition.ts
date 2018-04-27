@@ -1,9 +1,11 @@
 export default class UniqueDefinition {
     _name: string;
+    _alias: string;
     _action?: 'ADD' | 'DROP' = 'ADD';
 
-    constructor(key: string) {
+    constructor(key: string, alias: string) {
         this._name = key;
+        this._alias = alias;
     }
 
     add() {
@@ -16,6 +18,10 @@ export default class UniqueDefinition {
 
     get name() {
         return this._name;
+    }
+
+    get alias() {
+        return this._alias;
     }
 
     get action() {

@@ -190,14 +190,14 @@ var CreateStatement = /** @class */ (function () {
         return this.table._indexes.length > 0 ? common_tags_1.stripIndents(templateObject_12 || (templateObject_12 = __makeTemplateObject([",\n            ", "\n        "], [",\n            ",
             "\n        "])), this.table._indexes
             .filter(function (index) { return index.action === 'ADD'; })
-            .map(function (index) { return "INDEX (" + _this._client.escapeKey(index.name) + ")"; }).join(',\n')) : '';
+            .map(function (index) { return "INDEX " + _this._client.escapeKey(index.alias) + " (" + _this._client.escapeKey(index.name) + ")"; }).join(',\n')) : '';
     };
     CreateStatement.prototype._getUniques = function () {
         var _this = this;
         return this.table._uniques.length > 0 ? common_tags_1.stripIndents(templateObject_13 || (templateObject_13 = __makeTemplateObject([",\n            ", "\n        "], [",\n            ",
             "\n        "])), this.table._uniques
             .filter(function (unique) { return unique.action === 'ADD'; })
-            .map(function (unique) { return "CONSTRAINT " + _this._client.escapeKey(unique.name) + " UNIQUE (" + _this._client.escapeKey(unique.name) + ")"; })
+            .map(function (unique) { return "CONSTRAINT " + _this._client.escapeKey(unique.alias) + " UNIQUE (" + _this._client.escapeKey(unique.name) + ")"; })
             .join('\n')) : '';
     };
     CreateStatement.prototype.toString = function () {
@@ -255,7 +255,10 @@ var AlterStatement = /** @class */ (function () {
         var _this = this;
         return this.table._indexes.length > 0 ? common_tags_1.stripIndents(templateObject_15 || (templateObject_15 = __makeTemplateObject([",\n            ", "\n        "], [",\n            ",
             "\n        "])), this.table._indexes.map(function (index) {
-            return index.action + " INDEX (" + _this._client.escapeKey(index.name) + ")";
+            if (index.action === 'ADD')
+                return "ADD INDEX " + _this._client.escapeKey(index.alias) + " (" + _this._client.escapeKey(index.name) + ")";
+            else
+                return "DROP INDEX " + _this._client.escapeKey(index.alias);
         }).join(',\n')) : '';
     };
     AlterStatement.prototype._getUniques = function () {
@@ -263,9 +266,9 @@ var AlterStatement = /** @class */ (function () {
         return this.table._uniques.length > 0 ? common_tags_1.stripIndents(templateObject_16 || (templateObject_16 = __makeTemplateObject([",\n            ", "\n        "], [",\n            ",
             "\n        "])), this.table._uniques.map(function (unique) {
             if (unique.action === 'ADD')
-                return "ADD CONSTRAINT " + _this._client.escapeKey(unique.name) + " UNIQUE (" + _this._client.escapeKey(unique.name) + ")";
+                return "ADD CONSTRAINT " + _this._client.escapeKey(unique.alias) + " UNIQUE (" + _this._client.escapeKey(unique.name) + ")";
             else
-                return "DROP INDEX " + _this._client.escapeKey(unique.name);
+                return "DROP INDEX " + _this._client.escapeKey(unique.alias);
         }).join(',\n')) : '';
     };
     AlterStatement.prototype.toString = function () {

@@ -108,14 +108,14 @@ export default class Table {
         return primary;
     }
 
-    index(key: string) {
-        const index = new IndexDefinition(key);
+    index(key: string, alias = key) {
+        const index = new IndexDefinition(key, alias);
         this._indexes.push(index);
         return index;
     }
 
-    unique(key: string) {
-        const unique = new UniqueDefinition(key);
+    unique(key: string, alias = key) {
+        const unique = new UniqueDefinition(key, alias);
         this._uniques.push(unique);
         return unique;
     }

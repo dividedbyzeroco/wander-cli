@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var UniqueDefinition = /** @class */ (function () {
-    function UniqueDefinition(key) {
+    function UniqueDefinition(key, alias) {
         this._action = 'ADD';
         this._name = key;
+        this._alias = alias;
     }
     UniqueDefinition.prototype.add = function () {
         this._action = 'ADD';
@@ -14,6 +15,13 @@ var UniqueDefinition = /** @class */ (function () {
     Object.defineProperty(UniqueDefinition.prototype, "name", {
         get: function () {
             return this._name;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UniqueDefinition.prototype, "alias", {
+        get: function () {
+            return this._alias;
         },
         enumerable: true,
         configurable: true
