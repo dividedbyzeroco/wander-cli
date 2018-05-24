@@ -49,8 +49,8 @@ export default class DatabaseClient {
         const connection = mysql.createConnection({
             host: this._config.host,
             port: this._config.port,
-            user: this._config.user,
-            password: this._config.password,
+            user: decodeURIComponent(this._config.user),
+            password: decodeURIComponent(this._config.password),
             database: this._config.schema,
             timeout: this._config.timeout,
             charset: this._config.charset,
