@@ -110,6 +110,44 @@ exports.default = (function () {
             }
         });
     }); });
+    // Change environment
+    commander_1.default
+        .command('env')
+        .description('change environment')
+        .action(function () { return __awaiter(_this, void 0, void 0, function () {
+        var config, env, uri;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    // Start
+                    console.log();
+                    console.log(chalk_1.default.blue("[INFO] Changing " + chalk_1.default.yellow('wander') + " environment..."));
+                    config = files_1.getConfig();
+                    return [4 /*yield*/, promptly_1.default.prompt(chalk_1.default.blue("[INFO] Enter the name of the environment you want to switch to [" + config.currentEnvironment + "]: "), { retry: false, default: config.currentEnvironment })];
+                case 1:
+                    env = _a.sent();
+                    if (!(typeof config.environments[env] === 'undefined')) return [3 /*break*/, 3];
+                    return [4 /*yield*/, promptly_1.default.prompt(chalk_1.default.blue('[INFO] Environment is not yet defined. Enter its database URI: '), { retry: false })];
+                case 2:
+                    uri = _a.sent();
+                    // Create the new environment
+                    config.environments[env] = {
+                        databaseURI: uri
+                    };
+                    _a.label = 3;
+                case 3:
+                    // Prepare config
+                    config.currentEnvironment = env;
+                    // Write config
+                    files_1.writeToConfig(config);
+                    // Finish changing environments
+                    console.log();
+                    console.log(chalk_1.default.green("[DONE] Successfully changed " + chalk_1.default.yellow('wander') + " environment!"));
+                    console.log();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     // Creating a new migration
     commander_1.default
         .command('new <name>')
@@ -144,7 +182,8 @@ exports.default = (function () {
     commander_1.default
         .command('commit')
         .description('commit pending migrations')
-        .action(function () { return __awaiter(_this, void 0, void 0, function () {
+        .option('-v, --verbose', 'show scripts committed')
+        .action(function (cmd) { return __awaiter(_this, void 0, void 0, function () {
         var history, currentVersion, committed, config, environment, databaseConfig, migrations, database, _i, migrations_1, migration, transaction, create, alter, drop, seed, truncate, execute, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -192,16 +231,14 @@ exports.default = (function () {
                     _a.sent();
                     transaction.commit();
                     // Show transaction
-                    // console.log();
-                    // console.log(chalk.yellow(transaction.toString()));
-                    // console.log();
+                    if (cmd.verbose) {
+                        console.log();
+                        console.log(chalk_1.default.yellow(transaction.toString()));
+                        console.log();
+                    }
                     // Run transaction
                     return [4 /*yield*/, database.query(transaction.toString())];
                 case 4:
-                    // Show transaction
-                    // console.log();
-                    // console.log(chalk.yellow(transaction.toString()));
-                    // console.log();
                     // Run transaction
                     _a.sent();
                     console.log(chalk_1.default.green("[DONE] Successfully committed migration " + chalk_1.default.yellow(migration.version()) + "."));
@@ -239,6 +276,7 @@ exports.default = (function () {
         .command('revert')
         .description('revert the most recent migration')
         .option('-c, --count [count]', 'number of migrations to revert')
+        .option('-v, --verbose', 'show scripts committed')
         .action(function (cmd) { return __awaiter(_this, void 0, void 0, function () {
         var history, currentVersion, config, environment, databaseConfig, migrations, database, _i, migrations_2, migration, transaction, create, alter, drop, seed, truncate, execute, error_2;
         return __generator(this, function (_a) {
@@ -286,16 +324,14 @@ exports.default = (function () {
                     _a.sent();
                     transaction.commit();
                     // Show transaction
-                    // console.log();
-                    // console.log(chalk.yellow(transaction.toString()));
-                    // console.log();
+                    if (cmd.verbose) {
+                        console.log();
+                        console.log(chalk_1.default.yellow(transaction.toString()));
+                        console.log();
+                    }
                     // Run transaction
                     return [4 /*yield*/, database.query(transaction.toString())];
                 case 4:
-                    // Show transaction
-                    // console.log();
-                    // console.log(chalk.yellow(transaction.toString()));
-                    // console.log();
                     // Run transaction
                     _a.sent();
                     console.log(chalk_1.default.green("[DONE] Successfully reverted migration " + chalk_1.default.yellow(migration.version()) + "."));
@@ -332,6 +368,7 @@ exports.default = (function () {
     commander_1.default
         .command('reset')
         .description('reset the all migrations')
+        .option('-v, --verbose', 'show scripts committed')
         .action(function (cmd) { return __awaiter(_this, void 0, void 0, function () {
         var history, currentVersion, config, environment, databaseConfig, migrations, database, _i, migrations_3, migration, transaction, create, alter, drop, seed, truncate, execute, error_3;
         return __generator(this, function (_a) {
@@ -379,16 +416,14 @@ exports.default = (function () {
                     _a.sent();
                     transaction.commit();
                     // Show transaction
-                    // console.log();
-                    // console.log(chalk.yellow(transaction.toString()));
-                    // console.log();
+                    if (cmd.verbose) {
+                        console.log();
+                        console.log(chalk_1.default.yellow(transaction.toString()));
+                        console.log();
+                    }
                     // Run transaction
                     return [4 /*yield*/, database.query(transaction.toString())];
                 case 4:
-                    // Show transaction
-                    // console.log();
-                    // console.log(chalk.yellow(transaction.toString()));
-                    // console.log();
                     // Run transaction
                     _a.sent();
                     console.log(chalk_1.default.green("[DONE] Successfully reverted migration " + chalk_1.default.yellow(migration.version()) + "."));

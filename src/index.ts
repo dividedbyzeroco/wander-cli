@@ -71,7 +71,7 @@ export default () => {
             console.log();
         });
 
-    // Initialize wander
+    // Change environment
     program
         .command('env')
         .description('change environment')

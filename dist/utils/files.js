@@ -37,9 +37,10 @@ exports.writeToGitIgnore = function () {
 };
 exports.getHistory = function () {
     var historyPath = path_1.default.join(constants_1.Directories.Root, constants_1.Filenames.History);
+    var config = exports.getConfig();
     if (fs_1.default.existsSync(historyPath)) {
-        var config = JSON.parse(fs_1.default.readFileSync(historyPath, 'utf8'));
-        return config;
+        var history = JSON.parse(fs_1.default.readFileSync(historyPath, 'utf8'));
+        return history[config.currentEnvironment];
     }
     else
         return {
@@ -49,9 +50,15 @@ exports.getHistory = function () {
             latestError: null
         };
 };
-exports.writeToHistory = function (history) {
+exports.writeToHistory = function (environmentHistory) {
     var historyPath = path_1.default.join(constants_1.Directories.Root, constants_1.Filenames.History);
-    fs_1.default.writeFileSync(historyPath, JSON.stringify(history, null, 4));
+    var config = exports.getConfig();
+    var history = {};
+    if (fs_1.default.existsSync(historyPath)) {
+        history = JSON.parse(fs_1.default.readFileSync(historyPath, 'utf8'));
+    }
+    history[config.currentEnvironment] = environmentHistory;
+    fs_1.default.writeFileSync(historyPath, JSON.stringify(environmentHistory, null, 4));
 };
 exports.getPendingMigrations = function (dir) {
     var migrations = [];
