@@ -62,7 +62,7 @@ export const writeToHistory = environmentHistory => {
         history = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
     }
     history[config.currentEnvironment] = environmentHistory;
-    fs.writeFileSync(historyPath, JSON.stringify(environmentHistory, null, 4));
+    fs.writeFileSync(historyPath, JSON.stringify(history, null, 4));
 };
 
 export const getPendingMigrations = (dir: string) => {
