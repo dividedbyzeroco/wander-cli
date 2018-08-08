@@ -16,16 +16,17 @@ var parsers_1 = require("./parsers");
 var common_tags_1 = require("common-tags");
 exports.getConfig = function () {
     var configPath = path_1.default.join(constants_1.Directories.Root, constants_1.Filenames.Config);
+    var defaultConfig = {
+        migrationsDir: constants_1.Directories.Migrations,
+        environments: {},
+        currentEnvironment: constants_1.Environments.Default
+    };
     if (fs_1.default.existsSync(configPath)) {
         var config = JSON.parse(fs_1.default.readFileSync(configPath, 'utf8'));
         return config;
     }
     else
-        return {
-            migrationsDir: constants_1.Directories.Migrations,
-            environments: {},
-            currentEnvironment: 'default'
-        };
+        return defaultConfig;
 };
 exports.writeToConfig = function (config) {
     var configPath = path_1.default.join(constants_1.Directories.Root, constants_1.Filenames.Config);
@@ -38,17 +39,23 @@ exports.writeToGitIgnore = function () {
 exports.getHistory = function () {
     var historyPath = path_1.default.join(constants_1.Directories.Root, constants_1.Filenames.History);
     var config = exports.getConfig();
+    var defaultHistory = {
+        committed: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        latestError: null
+    };
     if (fs_1.default.existsSync(historyPath)) {
         var history = JSON.parse(fs_1.default.readFileSync(historyPath, 'utf8'));
-        return history[config.currentEnvironment];
+        var environmentHistory = history[config.currentEnvironment];
+        if (typeof environmentHistory === 'undefined') {
+            return defaultHistory;
+        }
+        else
+            return environmentHistory;
     }
     else
-        return {
-            committed: [],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            latestError: null
-        };
+        return defaultHistory;
 };
 exports.writeToHistory = function (environmentHistory) {
     var historyPath = path_1.default.join(constants_1.Directories.Root, constants_1.Filenames.History);
