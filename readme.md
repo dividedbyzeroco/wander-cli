@@ -35,6 +35,14 @@ To initialize a new `wander` project, run `wander init` inside your project fold
 
 This will ask you for the name of your `migrations` folder (default: `./migrations`) and your database URI. Once completed, you can now start using wander.
 
+# Changing environments
+
+`wander` supports migrations for different environments. To change your current `wander` environment, run `wander env` inside your project folder
+
+```bash
+> wander env
+```
+
 # Creating a new Migration
 
 To create a new migration, run `wander new <name>`.
@@ -402,6 +410,36 @@ module.exports = {
     }
 };
 ```
+
+# Committing Pending Migrations
+
+After you've set up your migrations, you can now commit them. To commit pending migrations, run the command below.
+
+```bash
+> wander commit
+```
+
+You can apply the `--verbose` or `-v` flag to see the actual scripts being run. Note that `wander` runs the migrations in the order of their version number.
+
+# Reverting Commited Migrations
+
+To revert migrations you've already committed, run the following command.
+
+```bash
+> wander revert
+```
+
+Like `commit`, you can apply the `--verbose` or `-v` flag to see the actual scripts being run. Also, you can specify the `--count` or `-c` parameter in order to tell `wander` how many migrations are going to be reverted, starting from the latest version.
+
+# Resetting All Migrations
+
+To reset all migrations, run the command below.
+
+```bash
+> wander reset
+```
+
+Like the previous commands, you can apply the `--verbose` or `-v` flag to see the actual scripts being run. The commands are reset from latest to oldest version.
 
 # Up versus Down
 
