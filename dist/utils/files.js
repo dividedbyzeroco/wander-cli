@@ -65,7 +65,7 @@ exports.writeToHistory = function (environmentHistory) {
         history = JSON.parse(fs_1.default.readFileSync(historyPath, 'utf8'));
     }
     history[config.currentEnvironment] = environmentHistory;
-    fs_1.default.writeFileSync(historyPath, JSON.stringify(environmentHistory, null, 4));
+    fs_1.default.writeFileSync(historyPath, JSON.stringify(history, null, 4));
 };
 exports.getPendingMigrations = function (dir) {
     var migrations = [];
