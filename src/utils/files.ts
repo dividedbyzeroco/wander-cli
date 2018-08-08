@@ -2,8 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import cwd from 'cwd';
 import glob from 'glob';
-import { Filenames, Directories, Delimiters } from './constants';
-import Versioning from './versioning';
+import { Filenames, Directories } from './constants';
 import { extractVersion } from './parsers';
 import { stripIndents } from 'common-tags';
 
@@ -35,9 +34,10 @@ export const writeToGitIgnore = () => {
 
 export const getHistory = () => {
     const historyPath = path.join(Directories.Root, Filenames.History);
+    const config = getConfig();
     if(fs.existsSync(historyPath)) {
-        const config = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
-        return config;
+        const history = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+        return history[config.currentEnvironment];
     }
     else return { 
         committed: [],
@@ -47,9 +47,15 @@ export const getHistory = () => {
     };
 };
 
-export const writeToHistory = history => {
+export const writeToHistory = environmentHistory => {
     const historyPath = path.join(Directories.Root, Filenames.History);
-    fs.writeFileSync(historyPath, JSON.stringify(history, null, 4));
+    const config = getConfig();
+    let history = {};
+    if(fs.existsSync(historyPath)) {
+        history = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+    }
+    history[config.currentEnvironment] = environmentHistory;
+    fs.writeFileSync(historyPath, JSON.stringify(environmentHistory, null, 4));
 };
 
 export const getPendingMigrations = (dir: string) => {

@@ -5,17 +5,13 @@ import chalk from 'chalk';
 import promptly from 'promptly';
 import rimraf from 'rimraf';
 import { stripIndents } from 'common-tags';
-import { TableDefinition } from './types/migration';
-import Table from './classes/table';
 import migrationTemplate from './templates/migration';
-import { Directories, Filenames, Delimiters, Keys, Environments } from './utils/constants';
+import { Directories, Delimiters, Environments } from './utils/constants';
 import { getNextVersion } from './utils/versioning';
 import { getConfig, getPendingMigrations, getHistory, writeToHistory, writeToConfig, writeToGitIgnore, getLatestMigrations } from './utils/files';
 import { isValidMigrationName } from './utils/validators';
-import KeyDefinition from './classes/key-definition';
 import Database from './adapters/database';
 import { extractDatabaseConfig } from './utils/parsers';
-import { BADQUERY } from 'dns';
 
 export default () => {
     // Initialize the program
@@ -75,6 +71,48 @@ export default () => {
             console.log();
         });
 
+    // Initialize wander
+    program
+        .command('env')
+        .description('change environment')
+        .action(async () => {
+            // Start
+            console.log();
+            console.log(chalk.blue(`[INFO] Changing ${chalk.yellow('wander')} environment...`));
+
+            // Get config
+            const config = getConfig();
+
+            // Get env
+            const env = await promptly.prompt(
+                chalk.blue(`[INFO] Enter the name of the environment you want to switch to [${config.currentEnvironment}]: `), 
+                { retry: false, default: config.currentEnvironment });
+            
+            if(typeof config.environments[env] === 'undefined') {
+                // Get database uri
+                const uri = await promptly.prompt(
+                    chalk.blue('[INFO] Environment is not yet defined. Enter its database URI: '),
+                    { retry: false });
+
+                // Create the new environment
+                config.environments[env] = {
+                    databaseURI: uri
+                };
+            }
+
+            // Prepare config
+            config.currentEnvironment = env;
+
+            // Write config
+            writeToConfig(config);
+
+            // Finish changing environments
+            console.log();
+            console.log(chalk.green(`[DONE] Successfully changed ${chalk.yellow('wander')} environment!`))
+            console.log();
+        });
+
+
     // Creating a new migration
     program
         .command('new <name>')
@@ -116,7 +154,8 @@ export default () => {
     program
         .command('commit')
         .description('commit pending migrations')
-        .action(async () => {
+        .option('-v, --verbose', 'show scripts committed')
+        .action(async (cmd) => {
             // Start
             console.log();
             console.log(chalk.blue('[INFO] Committing pending migrations...'));
@@ -170,9 +209,11 @@ export default () => {
                     transaction.commit();
 
                     // Show transaction
-                    // console.log();
-                    // console.log(chalk.yellow(transaction.toString()));
-                    // console.log();
+                    if(cmd.verbose) {
+                        console.log();
+                        console.log(chalk.yellow(transaction.toString()));
+                        console.log();
+                    }
 
                     // Run transaction
                     await database.query(transaction.toString());
@@ -212,6 +253,7 @@ export default () => {
         .command('revert')
         .description('revert the most recent migration')
         .option('-c, --count [count]', 'number of migrations to revert')
+        .option('-v, --verbose', 'show scripts committed')
         .action(async (cmd) => {
             // Start
             console.log();
@@ -265,9 +307,11 @@ export default () => {
                     transaction.commit();
 
                     // Show transaction
-                    // console.log();
-                    // console.log(chalk.yellow(transaction.toString()));
-                    // console.log();
+                    if(cmd.verbose) {
+                        console.log();
+                        console.log(chalk.yellow(transaction.toString()));
+                        console.log();
+                    }
 
                     // Run transaction
                     await database.query(transaction.toString());
@@ -305,6 +349,7 @@ export default () => {
     program
         .command('reset')
         .description('reset the all migrations')
+        .option('-v, --verbose', 'show scripts committed')
         .action(async (cmd) => {
             // Start
             console.log();
@@ -358,9 +403,11 @@ export default () => {
                     transaction.commit();
 
                     // Show transaction
-                    // console.log();
-                    // console.log(chalk.yellow(transaction.toString()));
-                    // console.log();
+                    if(cmd.verbose) {
+                        console.log();
+                        console.log(chalk.yellow(transaction.toString()));
+                        console.log();
+                    }
 
                     // Run transaction
                     await database.query(transaction.toString());
