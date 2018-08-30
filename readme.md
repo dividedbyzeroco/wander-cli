@@ -301,6 +301,13 @@ __Methods__
 + unique(`columnName`: string, `alias`?: string)
     - Create a unique index on the table
 
+You can also specify specific options for creation.
+
++ nullable(`isNullable`?: boolean)
+    - Determine whether the field should be nullable or not nullable
++ increments()
+    - State that the field should auto-increment
+
 ## Key Actions
 
 In addition, when using the `alter` option, the above methods have specific actions that need to be defined in order to let `wander` know how the columns are going to be changed.
@@ -311,6 +318,17 @@ In addition, when using the `alter` option, the above methods have specific acti
     - Modify the column
 + drop()
     - Drop the column/index/unique key
+
+You can also specify specific options for the alteration.
+
++ nullable(`isNullable`?: boolean)
+    - Determine whether the field should be nullable or not nullable
++ increments()
+    - State that the field should auto-increment
++ before(`column`?: string)
+    - Determine the position of the column
++ after(`column`?: string)
+    - Determine the position of the column
 
 __Example__    
 

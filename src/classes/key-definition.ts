@@ -8,6 +8,8 @@ export default class KeyDefinition {
     _increments = false;
     _charset: string;
     _collation?: string;
+    _before?: string;
+    _after?: string;
 
     constructor(key: string, type: string) {
         this._name = key;
@@ -28,6 +30,14 @@ export default class KeyDefinition {
         this._charset = name;
         this._collation = collation;
         return this;
+    }
+
+    before(column: string) {
+        this._before = column;
+    }
+
+    after(column: string) {
+        this._after = column;
     }
 
     add() {
