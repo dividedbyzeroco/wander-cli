@@ -34,10 +34,12 @@ export default class KeyDefinition {
 
     before(column: string) {
         this._before = column;
+        return this;
     }
 
     after(column: string) {
         this._after = column;
+        return this;
     }
 
     add() {
