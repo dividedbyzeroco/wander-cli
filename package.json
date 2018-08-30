@@ -1,6 +1,6 @@
 {
   "name": "wander-cli",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Database Migrations for Modern Apps",
   "main": "dist/index.js",
   "bin": {
