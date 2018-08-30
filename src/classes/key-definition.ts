@@ -1,5 +1,3 @@
-import { METHODS } from "http";
-
 export default class KeyDefinition {
     _name: string;
     _type: string;

@@ -22,6 +22,14 @@ var KeyDefinition = /** @class */ (function () {
         this._collation = collation;
         return this;
     };
+    KeyDefinition.prototype.before = function (column) {
+        this._before = column;
+        return this;
+    };
+    KeyDefinition.prototype.after = function (column) {
+        this._after = column;
+        return this;
+    };
     KeyDefinition.prototype.add = function () {
         this._action = 'ADD';
     };

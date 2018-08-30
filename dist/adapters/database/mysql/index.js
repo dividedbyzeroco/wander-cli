@@ -229,7 +229,9 @@ var AlterStatement = /** @class */ (function () {
             key._nullable ? '' : 'NOT NULL',
             key._increments ? 'AUTO_INCREMENT' : '',
             key._charset ? "CHARSET " + key._charset : '',
-            key._collation ? "COLLATE " + key._collation : ''
+            key._collation ? "COLLATE " + key._collation : '',
+            key._before ? "BEFORE " + this._client.escapeKey(key._before) : '',
+            key._after ? "AFTER " + this._client.escapeKey(key._after) : ''
         ].join(' ').trim();
     };
     AlterStatement.prototype._getKeys = function () {
