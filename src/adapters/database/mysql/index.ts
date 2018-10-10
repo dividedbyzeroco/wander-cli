@@ -274,9 +274,16 @@ class AlterStatement {
     }
 
     toString() {
+        const options: string[] = [];
+
+        if(this._getKeys().length > 0) options.push(this._getKeys());
+        if(this._getPrimary().length > 0) options.push(this._getPrimary());
+        if(this._getIndexes().length > 0) options.push(this._getIndexes());
+        if(this._getUniques().length > 0) options.push(this._getUniques());
+
         return stripIndents`
             ALTER TABLE \`${this.table._tableName}\`
-            ${[this._getKeys(), this._getPrimary(), this._getIndexes(), this._getUniques()].join(',\n')};
+            ${options.join(',\n')};
         `;
     }
 }
