@@ -155,6 +155,7 @@ export default () => {
         .command('commit')
         .description('commit pending migrations')
         .option('-v, --verbose', 'show scripts committed')
+        .option('-d, --dryrun', 'only display scripts but do not execute')
         .action(async (cmd) => {
             // Start
             console.log();
@@ -209,19 +210,23 @@ export default () => {
                     transaction.commit();
 
                     // Show transaction
-                    if(cmd.verbose) {
+                    if(cmd.verbose || cmd.dryrun) {
                         console.log();
                         console.log(chalk.yellow(transaction.toString()));
                         console.log();
                     }
 
-                    // Run transaction
-                    await database.query(transaction.toString());
+                    if(!cmd.dryrun) {
+                        // Run transaction
+                        await database.query(transaction.toString());    
+                        console.log(chalk.green(`[DONE] Successfully committed migration ${chalk.yellow(migration.version())}.`));
 
-                    console.log(chalk.green(`[DONE] Successfully committed migration ${chalk.yellow(migration.version())}.`));
-
-                    // Add migration to history
-                    history.committed.push(migration.version());
+                        // Add migration to history
+                        history.committed.push(migration.version());
+                    }
+                    else {
+                        console.log(chalk.green(`[DONE] Successfully prepared migration ${chalk.yellow(migration.version())}.`));
+                    }
 
                     // Increase committed
                     committed++;
@@ -254,6 +259,7 @@ export default () => {
         .description('revert the most recent migration')
         .option('-c, --count [count]', 'number of migrations to revert')
         .option('-v, --verbose', 'show scripts committed')
+        .option('-d, --dryrun', 'only display scripts but do not execute')
         .action(async (cmd) => {
             // Start
             console.log();
@@ -307,19 +313,23 @@ export default () => {
                     transaction.commit();
 
                     // Show transaction
-                    if(cmd.verbose) {
+                    if(cmd.verbose || cmd.dryrun) {
                         console.log();
                         console.log(chalk.yellow(transaction.toString()));
                         console.log();
                     }
 
-                    // Run transaction
-                    await database.query(transaction.toString());
+                    if(!cmd.dryrun) {
+                        // Run transaction
+                        await database.query(transaction.toString());    
+                        console.log(chalk.green(`[DONE] Successfully reverted migration ${chalk.yellow(migration.version())}.`));
 
-                    console.log(chalk.green(`[DONE] Successfully reverted migration ${chalk.yellow(migration.version())}.`));
-
-                    // Remove migration from history
-                    history.committed.pop();
+                        // Remove migration from history
+                        history.committed.pop();
+                    }
+                    else {
+                        console.log(chalk.green(`[DONE] Successfully prepared migration ${chalk.yellow(migration.version())}.`));
+                    }
                 }
 
                 console.log();

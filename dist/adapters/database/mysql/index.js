@@ -247,15 +247,15 @@ var AlterStatement = /** @class */ (function () {
     };
     AlterStatement.prototype._getPrimary = function () {
         if (this._table._primary && this._table._primary.action === 'ADD')
-            return ",\nADD PRIMARY KEY (" + this._client.escapeKey(this.table._primary.name) + ")";
+            return "ADD PRIMARY KEY (" + this._client.escapeKey(this.table._primary.name) + ")\n";
         else if (this._table._primary && this._table._primary.action === 'DROP')
-            return ",\nDROP PRIMARY KEY";
+            return "DROP PRIMARY KEY\n";
         else
             return '';
     };
     AlterStatement.prototype._getIndexes = function () {
         var _this = this;
-        return this.table._indexes.length > 0 ? common_tags_1.stripIndents(templateObject_15 || (templateObject_15 = __makeTemplateObject([",\n            ", "\n        "], [",\n            ",
+        return this.table._indexes.length > 0 ? common_tags_1.stripIndents(templateObject_15 || (templateObject_15 = __makeTemplateObject(["\n            ", "\n        "], ["\n            ",
             "\n        "])), this.table._indexes.map(function (index) {
             if (index.action === 'ADD')
                 return "ADD INDEX " + _this._client.escapeKey(index.alias) + " (" + _this._client.escapeKey(index.name) + ")";
@@ -265,7 +265,7 @@ var AlterStatement = /** @class */ (function () {
     };
     AlterStatement.prototype._getUniques = function () {
         var _this = this;
-        return this.table._uniques.length > 0 ? common_tags_1.stripIndents(templateObject_16 || (templateObject_16 = __makeTemplateObject([",\n            ", "\n        "], [",\n            ",
+        return this.table._uniques.length > 0 ? common_tags_1.stripIndents(templateObject_16 || (templateObject_16 = __makeTemplateObject(["\n            ", "\n        "], ["\n            ",
             "\n        "])), this.table._uniques.map(function (unique) {
             if (unique.action === 'ADD')
                 return "ADD CONSTRAINT " + _this._client.escapeKey(unique.alias) + " UNIQUE (" + _this._client.escapeKey(unique.name) + ")";
@@ -274,7 +274,7 @@ var AlterStatement = /** @class */ (function () {
         }).join(',\n')) : '';
     };
     AlterStatement.prototype.toString = function () {
-        return common_tags_1.stripIndents(templateObject_17 || (templateObject_17 = __makeTemplateObject(["\n            ALTER TABLE `", "`\n            ", "", "", "", ";\n        "], ["\n            ALTER TABLE \\`", "\\`\n            ", "", "", "", ";\n        "])), this.table._tableName, this._getKeys(), this._getPrimary(), this._getIndexes(), this._getUniques());
+        return common_tags_1.stripIndents(templateObject_17 || (templateObject_17 = __makeTemplateObject(["\n            ALTER TABLE `", "`\n            ", ";\n        "], ["\n            ALTER TABLE \\`", "\\`\n            ", ";\n        "])), this.table._tableName, [this._getKeys(), this._getPrimary(), this._getIndexes(), this._getUniques()].join(',\n'));
     };
     return AlterStatement;
 }());

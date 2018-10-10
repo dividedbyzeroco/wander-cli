@@ -245,14 +245,14 @@ class AlterStatement {
 
     _getPrimary() {
         if(this._table._primary && this._table._primary.action === 'ADD')
-            return `,\nADD PRIMARY KEY (${this._client.escapeKey(this.table._primary.name)})`;
+            return `ADD PRIMARY KEY (${this._client.escapeKey(this.table._primary.name)})\n`;
         else if(this._table._primary && this._table._primary.action === 'DROP')
-            return `,\nDROP PRIMARY KEY`;
+            return `DROP PRIMARY KEY\n`;
         else return '';
     }
 
     _getIndexes() {
-        return this.table._indexes.length > 0? stripIndents`,
+        return this.table._indexes.length > 0? stripIndents`
             ${this.table._indexes.map(index => {
                 if(index.action === 'ADD')
                     return `ADD INDEX ${this._client.escapeKey(index.alias)} (${this._client.escapeKey(index.name)})`;
@@ -263,7 +263,7 @@ class AlterStatement {
     }
 
     _getUniques() {
-        return this.table._uniques.length > 0? stripIndents`,
+        return this.table._uniques.length > 0? stripIndents`
             ${this.table._uniques.map(unique => {
                 if(unique.action === 'ADD')
                     return `ADD CONSTRAINT ${this._client.escapeKey(unique.alias)} UNIQUE (${this._client.escapeKey(unique.name)})`;
@@ -276,7 +276,7 @@ class AlterStatement {
     toString() {
         return stripIndents`
             ALTER TABLE \`${this.table._tableName}\`
-            ${this._getKeys()}${this._getPrimary()}${this._getIndexes()}${this._getUniques()};
+            ${[this._getKeys(), this._getPrimary(), this._getIndexes(), this._getUniques()].join(',\n')};
         `;
     }
 }
