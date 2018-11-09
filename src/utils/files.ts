@@ -94,7 +94,7 @@ export const getLatestMigrations = (dir: string, count?: number) => {
     const latestMigrations = history.committed.slice().reverse().slice(0, migrationCount);
     let filenames = glob.sync(path.join(dir,'/v*_*_*__*.js'));
 
-    filenames = filenames.filter(filename => !latestMigrations.includes(extractVersion(dir, filename).standard))
+    filenames = filenames.filter(filename => latestMigrations.includes(extractVersion(dir, filename).standard))
     .sort((prev, curr) => {
         const vPrev = prev.split('/')[1];
         const vCurr = curr.split('/')[1];
@@ -103,6 +103,7 @@ export const getLatestMigrations = (dir: string, count?: number) => {
     .slice()
     .reverse()
     .slice();
+    console.log('FILE', filenames);
 
     for(let filename of filenames) {
         const migration = require(cwd(filename));

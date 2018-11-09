@@ -92,7 +92,7 @@ exports.getLatestMigrations = function (dir, count) {
     var migrationCount = count || history.committed.length;
     var latestMigrations = history.committed.slice().reverse().slice(0, migrationCount);
     var filenames = glob_1.default.sync(path_1.default.join(dir, '/v*_*_*__*.js'));
-    filenames = filenames.filter(function (filename) { return !latestMigrations.includes(parsers_1.extractVersion(dir, filename).standard); })
+    filenames = filenames.filter(function (filename) { return latestMigrations.includes(parsers_1.extractVersion(dir, filename).standard); })
         .sort(function (prev, curr) {
         var vPrev = prev.split('/')[1];
         var vCurr = curr.split('/')[1];
@@ -101,6 +101,7 @@ exports.getLatestMigrations = function (dir, count) {
         .slice()
         .reverse()
         .slice();
+    console.log('FILE', filenames);
     for (var _i = 0, filenames_2 = filenames; _i < filenames_2.length; _i++) {
         var filename = filenames_2[_i];
         var migration = require(cwd_1.default(filename));
