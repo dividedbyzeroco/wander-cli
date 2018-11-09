@@ -23,21 +23,25 @@ export default class Versioning {
     }
 }
 
-const getVersionString = (str: string) => {
+export const getVersionString = (str: string) => {
     return str.split(Delimiters.Separator)[0].slice(1);
 };
 
-const getVersionParts = (str: string) => {
+export const getVersionParts = (str: string) => {
     return str.split(Delimiters.FileSafe).map(part => parseInt(part));
 };
 
-const compareVersions = (vPrev, vCurr) => {
+export const parseVersionParts = (str: string) => {
+    return getVersionParts(getVersionString(str));
+};
+
+export const compareVersions = (vPrev, vCurr) => {
     return semver.gt(vPrev.join(Delimiters.Standard), vCurr.join(Delimiters.Standard)) ? -1 : 1;
 };
 
 export const getNextVersion = (dir: string, versionType: string) => {
     // Get latest version
-    const versions = fs.readdirSync(dir).map<number[]>(version => getVersionParts(getVersionString(version)));
+    const versions = fs.readdirSync(dir).map<number[]>(version => parseVersionParts(version));
     const sortedVersions = versions.sort(compareVersions);
     const latestVersion = versions.length === 0 ? [1, 0, 1] : sortedVersions[0];
 

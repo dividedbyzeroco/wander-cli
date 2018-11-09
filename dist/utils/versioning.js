@@ -29,19 +29,22 @@ var Versioning = /** @class */ (function () {
     return Versioning;
 }());
 exports.default = Versioning;
-var getVersionString = function (str) {
+exports.getVersionString = function (str) {
     return str.split(constants_1.Delimiters.Separator)[0].slice(1);
 };
-var getVersionParts = function (str) {
+exports.getVersionParts = function (str) {
     return str.split(constants_1.Delimiters.FileSafe).map(function (part) { return parseInt(part); });
 };
-var compareVersions = function (vPrev, vCurr) {
+exports.parseVersionParts = function (str) {
+    return exports.getVersionParts(exports.getVersionString(str));
+};
+exports.compareVersions = function (vPrev, vCurr) {
     return semver_1.default.gt(vPrev.join(constants_1.Delimiters.Standard), vCurr.join(constants_1.Delimiters.Standard)) ? -1 : 1;
 };
 exports.getNextVersion = function (dir, versionType) {
     // Get latest version
-    var versions = fs_1.default.readdirSync(dir).map(function (version) { return getVersionParts(getVersionString(version)); });
-    var sortedVersions = versions.sort(compareVersions);
+    var versions = fs_1.default.readdirSync(dir).map(function (version) { return exports.parseVersionParts(version); });
+    var sortedVersions = versions.sort(exports.compareVersions);
     var latestVersion = versions.length === 0 ? [1, 0, 1] : sortedVersions[0];
     // Get version parts
     var major = latestVersion[0], minor = latestVersion[1], patch = latestVersion[2];

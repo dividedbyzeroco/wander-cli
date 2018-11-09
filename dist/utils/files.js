@@ -14,6 +14,7 @@ var glob_1 = __importDefault(require("glob"));
 var constants_1 = require("./constants");
 var parsers_1 = require("./parsers");
 var common_tags_1 = require("common-tags");
+var versioning_1 = require("./versioning");
 exports.getConfig = function () {
     var configPath = path_1.default.join(constants_1.Directories.Root, constants_1.Filenames.Config);
     var defaultConfig = {
@@ -72,8 +73,11 @@ exports.getPendingMigrations = function (dir) {
     var history = exports.getHistory();
     var committedMigrations = history.committed;
     var filenames = glob_1.default.sync(path_1.default.join(dir, '/v*_*_*__*.js'));
-    filenames = filenames.filter(function (filename) {
-        return !committedMigrations.includes(parsers_1.extractVersion(dir, filename).standard);
+    filenames = filenames.filter(function (filename) { return !committedMigrations.includes(parsers_1.extractVersion(dir, filename).standard); })
+        .sort(function (prev, curr) {
+        var vPrev = prev.split('/')[1];
+        var vCurr = curr.split('/')[1];
+        return versioning_1.compareVersions(versioning_1.parseVersionParts(vCurr), versioning_1.parseVersionParts(vPrev));
     });
     for (var _i = 0, filenames_1 = filenames; _i < filenames_1.length; _i++) {
         var filename = filenames_1[_i];
@@ -88,8 +92,11 @@ exports.getLatestMigrations = function (dir, count) {
     var migrationCount = count || history.committed.length;
     var latestMigrations = history.committed.slice().reverse().slice(0, migrationCount);
     var filenames = glob_1.default.sync(path_1.default.join(dir, '/v*_*_*__*.js'));
-    filenames = filenames.filter(function (filename) {
-        return latestMigrations.includes(parsers_1.extractVersion(dir, filename).standard);
+    filenames = filenames.filter(function (filename) { return !latestMigrations.includes(parsers_1.extractVersion(dir, filename).standard); })
+        .sort(function (prev, curr) {
+        var vPrev = prev.split('/')[1];
+        var vCurr = curr.split('/')[1];
+        return versioning_1.compareVersions(versioning_1.parseVersionParts(vCurr), versioning_1.parseVersionParts(vPrev));
     })
         .slice()
         .reverse()
