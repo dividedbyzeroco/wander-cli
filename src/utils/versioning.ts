@@ -38,8 +38,8 @@ const compareVersions = (vPrev, vCurr) => {
 export const getNextVersion = (dir: string, versionType: string) => {
     // Get latest version
     const versions = fs.readdirSync(dir).map<number[]>(version => getVersionParts(getVersionString(version)));
-    const latestVersion = versions.length === 0 ? [1, 0, 1] : 
-        versions.sort(compareVersions)[0];
+    const sortedVersions = versions.sort(compareVersions);
+    const latestVersion = versions.length === 0 ? [1, 0, 1] : sortedVersions[0];
 
     // Get version parts
     const [ major, minor, patch ] = latestVersion;

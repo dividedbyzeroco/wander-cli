@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = __importDefault(require("fs"));
+var semver_1 = __importDefault(require("semver"));
 var constants_1 = require("./constants");
 var Versioning = /** @class */ (function () {
     function Versioning(major, minor, patch) {
@@ -34,14 +35,16 @@ var getVersionString = function (str) {
 var getVersionParts = function (str) {
     return str.split(constants_1.Delimiters.FileSafe).map(function (part) { return parseInt(part); });
 };
+var compareVersions = function (vPrev, vCurr) {
+    return semver_1.default.gt(vPrev.join(constants_1.Delimiters.Standard), vCurr.join(constants_1.Delimiters.Standard)) ? -1 : 1;
+};
 exports.getNextVersion = function (dir, versionType) {
     // Get latest version
-    var versions = fs_1.default.readdirSync(dir);
-    var latestVersion = versions.length === 0 ?
-        "v1" + constants_1.Delimiters.FileSafe + "0" + constants_1.Delimiters.FileSafe + "-1" + constants_1.Delimiters.Separator :
-        versions.sort(function (vPrev, vCurr) { return vPrev > vCurr ? -1 : 1; })[0];
+    var versions = fs_1.default.readdirSync(dir).map(function (version) { return getVersionParts(getVersionString(version)); });
+    var sortedVersions = versions.sort(compareVersions);
+    var latestVersion = versions.length === 0 ? [1, 0, 1] : sortedVersions[0];
     // Get version parts
-    var _a = getVersionParts(getVersionString(latestVersion)), major = _a[0], minor = _a[1], patch = _a[2];
+    var major = latestVersion[0], minor = latestVersion[1], patch = latestVersion[2];
     // Return next version
     switch (versionType) {
         case 'major': return new Versioning(major + 1, 0, 0);
