@@ -1,4 +1,5 @@
 import fs from 'fs';
+import semver from 'semver';
 import { Delimiters } from './constants';
 
 export default class Versioning {
@@ -30,15 +31,18 @@ const getVersionParts = (str: string) => {
     return str.split(Delimiters.FileSafe).map(part => parseInt(part));
 };
 
+const compareVersions = (vPrev, vCurr) => {
+    return semver.gt(vPrev.join(Delimiters.Standard), vCurr.join(Delimiters.Standard)) ? -1 : 1;
+};
+
 export const getNextVersion = (dir: string, versionType: string) => {
     // Get latest version
-    const versions = fs.readdirSync(dir);
-    const latestVersion = versions.length === 0 ? 
-        `v1${Delimiters.FileSafe}0${Delimiters.FileSafe}-1${Delimiters.Separator}` : 
-        versions.sort((vPrev, vCurr) => vPrev > vCurr? -1 : 1)[0];
+    const versions = fs.readdirSync(dir).map<number[]>(version => getVersionParts(getVersionString(version)));
+    const latestVersion = versions.length === 0 ? [1, 0, 1] : 
+        versions.sort(compareVersions)[0];
 
     // Get version parts
-    const [ major, minor, patch ] = getVersionParts(getVersionString(latestVersion));
+    const [ major, minor, patch ] = latestVersion;
     
     // Return next version
     switch(versionType) {
