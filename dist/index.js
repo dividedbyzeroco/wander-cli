@@ -185,80 +185,98 @@ exports.default = (function () {
         .option('-v, --verbose', 'show scripts committed')
         .option('-d, --dryrun', 'only display scripts but do not execute')
         .action(function (cmd) { return __awaiter(_this, void 0, void 0, function () {
-        var history, currentVersion, committed, config, environment, databaseConfig, migrations;
+        var history, currentVersion, committed, config, environment, databaseConfig, migrations, database, _i, migrations_1, migration, transaction, create, alter, drop, seed, truncate, execute, error_1;
         return __generator(this, function (_a) {
-            // Start
-            console.log();
-            console.log(chalk_1.default.blue('[INFO] Committing pending migrations...'));
-            history = files_1.getHistory();
-            currentVersion = '';
-            committed = 0;
-            try {
-                config = files_1.getConfig();
-                environment = config.environments && config.environments[config.currentEnvironment] || null;
-                // Check if environment exists
-                if (!environment)
-                    throw new Error("Current environment '" + config.currentEnvironment + "' cannot be found.");
-                databaseConfig = parsers_1.extractDatabaseConfig(environment.databaseURI);
-                migrations = files_1.getPendingMigrations(config.migrationsDir);
-                // // Connect to the database
-                // const database = Database.use(databaseConfig.protocol, databaseConfig);
-                // // Update history
-                // if(migrations.length > 0)
-                //     history.updatedAt = new Date().toISOString();
-                // else {
-                //     // End
-                //     console.log(chalk.blue(`[INFO] No pending migrations. Try ${chalk.yellow('wander new <name>')} to create a new one.`));
-                //     console.log();
-                //     process.exit();
-                //     return;
-                // }
-                // // Run migration commits
-                // for(let migration of migrations) {
-                //     currentVersion = migration.version();
-                //     console.log(chalk.blue(`[INFO] Committing migration ${chalk.yellow(migration.version())}...`));
-                //     // Prepare transaction
-                //     const transaction = new database.Transaction();
-                //     const { create, alter, drop, seed, truncate, execute } = transaction;
-                //     // Prepare transaction
-                //     await migration.up({ create, alter, drop, seed, truncate, execute });
-                //     transaction.commit();
-                //     // Show transaction
-                //     if(cmd.verbose || cmd.dryrun) {
-                //         console.log();
-                //         console.log(chalk.yellow(transaction.toString()));
-                //         console.log();
-                //     }
-                //     if(!cmd.dryrun) {
-                //         // Run transaction
-                //         await database.query(transaction.toString());    
-                //         console.log(chalk.green(`[DONE] Successfully committed migration ${chalk.yellow(migration.version())}.`));
-                //         // Add migration to history
-                //         history.committed.push(migration.version());
-                //     }
-                //     else {
-                //         console.log(chalk.green(`[DONE] Successfully prepared migration ${chalk.yellow(migration.version())}.`));
-                //     }
-                //     // Increase committed
-                //     committed++;
-                // }
+            switch (_a.label) {
+                case 0:
+                    // Start
+                    console.log();
+                    console.log(chalk_1.default.blue('[INFO] Committing pending migrations...'));
+                    history = files_1.getHistory();
+                    currentVersion = '';
+                    committed = 0;
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 9, , 10]);
+                    config = files_1.getConfig();
+                    environment = config.environments && config.environments[config.currentEnvironment] || null;
+                    // Check if environment exists
+                    if (!environment)
+                        throw new Error("Current environment '" + config.currentEnvironment + "' cannot be found.");
+                    databaseConfig = parsers_1.extractDatabaseConfig(environment.databaseURI);
+                    migrations = files_1.getPendingMigrations(config.migrationsDir);
+                    database = database_1.default.use(databaseConfig.protocol, databaseConfig);
+                    // Update history
+                    if (migrations.length > 0)
+                        history.updatedAt = new Date().toISOString();
+                    else {
+                        // End
+                        console.log(chalk_1.default.blue("[INFO] No pending migrations. Try " + chalk_1.default.yellow('wander new <name>') + " to create a new one."));
+                        console.log();
+                        process.exit();
+                        return [2 /*return*/];
+                    }
+                    _i = 0, migrations_1 = migrations;
+                    _a.label = 2;
+                case 2:
+                    if (!(_i < migrations_1.length)) return [3 /*break*/, 8];
+                    migration = migrations_1[_i];
+                    currentVersion = migration.version();
+                    console.log(chalk_1.default.blue("[INFO] Committing migration " + chalk_1.default.yellow(migration.version()) + "..."));
+                    transaction = new database.Transaction();
+                    create = transaction.create, alter = transaction.alter, drop = transaction.drop, seed = transaction.seed, truncate = transaction.truncate, execute = transaction.execute;
+                    // Prepare transaction
+                    return [4 /*yield*/, migration.up({ create: create, alter: alter, drop: drop, seed: seed, truncate: truncate, execute: execute })];
+                case 3:
+                    // Prepare transaction
+                    _a.sent();
+                    transaction.commit();
+                    // Show transaction
+                    if (cmd.verbose || cmd.dryrun) {
+                        console.log();
+                        console.log(chalk_1.default.yellow(transaction.toString()));
+                        console.log();
+                    }
+                    if (!!cmd.dryrun) return [3 /*break*/, 5];
+                    // Run transaction
+                    return [4 /*yield*/, database.query(transaction.toString())];
+                case 4:
+                    // Run transaction
+                    _a.sent();
+                    console.log(chalk_1.default.green("[DONE] Successfully committed migration " + chalk_1.default.yellow(migration.version()) + "."));
+                    // Add migration to history
+                    history.committed.push(migration.version());
+                    return [3 /*break*/, 6];
+                case 5:
+                    console.log(chalk_1.default.green("[DONE] Successfully prepared migration " + chalk_1.default.yellow(migration.version()) + "."));
+                    _a.label = 6;
+                case 6:
+                    // Increase committed
+                    committed++;
+                    _a.label = 7;
+                case 7:
+                    _i++;
+                    return [3 /*break*/, 2];
+                case 8: return [3 /*break*/, 10];
+                case 9:
+                    error_1 = _a.sent();
+                    console.error(chalk_1.default.red(common_tags_1.stripIndents(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n                    [FAIL] Could not commit '", "': ", "\n                    ", "\n                "], ["\n                    [FAIL] Could not commit '", "': ", "\n                    ", "\n                "])), chalk_1.default.yellow(currentVersion), error_1.message, error_1.stack)));
+                    history.latestError = {
+                        message: error_1.message,
+                        failedAt: new Date().toISOString(),
+                        migrationVersion: currentVersion
+                    };
+                    return [3 /*break*/, 10];
+                case 10:
+                    // Write the new history
+                    files_1.writeToHistory(history);
+                    // Padding
+                    console.log();
+                    console.log(chalk_1.default.blue("[INFO] Commited " + committed + " migration/s!"));
+                    console.log();
+                    process.exit();
+                    return [2 /*return*/];
             }
-            catch (error) {
-                console.error(chalk_1.default.red(common_tags_1.stripIndents(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n                    [FAIL] Could not commit '", "': ", "\n                    ", "\n                "], ["\n                    [FAIL] Could not commit '", "': ", "\n                    ", "\n                "])), chalk_1.default.yellow(currentVersion), error.message, error.stack)));
-                history.latestError = {
-                    message: error.message,
-                    failedAt: new Date().toISOString(),
-                    migrationVersion: currentVersion
-                };
-            }
-            // Write the new history
-            files_1.writeToHistory(history);
-            // Padding
-            console.log();
-            console.log(chalk_1.default.blue("[INFO] Commited " + committed + " migration/s!"));
-            console.log();
-            process.exit();
-            return [2 /*return*/];
         });
     }); });
     commander_1.default
@@ -268,7 +286,7 @@ exports.default = (function () {
         .option('-v, --verbose', 'show scripts committed')
         .option('-d, --dryrun', 'only display scripts but do not execute')
         .action(function (cmd) { return __awaiter(_this, void 0, void 0, function () {
-        var history, currentVersion, config, environment, databaseConfig, migrations, database, _i, migrations_1, migration, transaction, create, alter, drop, seed, truncate, execute, error_1;
+        var history, currentVersion, config, environment, databaseConfig, migrations, database, _i, migrations_2, migration, transaction, create, alter, drop, seed, truncate, execute, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -298,11 +316,11 @@ exports.default = (function () {
                         return [2 /*return*/];
                     }
                     database = database_1.default.use(databaseConfig.protocol, databaseConfig);
-                    _i = 0, migrations_1 = migrations;
+                    _i = 0, migrations_2 = migrations;
                     _a.label = 2;
                 case 2:
-                    if (!(_i < migrations_1.length)) return [3 /*break*/, 7];
-                    migration = migrations_1[_i];
+                    if (!(_i < migrations_2.length)) return [3 /*break*/, 7];
+                    migration = migrations_2[_i];
                     currentVersion = migration.version();
                     console.log(chalk_1.default.blue("[INFO] Reverting migration " + chalk_1.default.yellow(migration.version()) + "..."));
                     transaction = new database.Transaction();
@@ -340,11 +358,11 @@ exports.default = (function () {
                     console.log(chalk_1.default.blue("[INFO] Reverted " + migrations.length + " migration/s!"));
                     return [3 /*break*/, 9];
                 case 8:
-                    error_1 = _a.sent();
+                    error_2 = _a.sent();
                     console.log();
-                    console.error(chalk_1.default.red(common_tags_1.stripIndents(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n                    [FAIL] Could not revert migrations: ", "\n                    ", "\n                "], ["\n                    [FAIL] Could not revert migrations: ", "\n                    ", "\n                "])), error_1.message, error_1.stack)));
+                    console.error(chalk_1.default.red(common_tags_1.stripIndents(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n                    [FAIL] Could not revert migrations: ", "\n                    ", "\n                "], ["\n                    [FAIL] Could not revert migrations: ", "\n                    ", "\n                "])), error_2.message, error_2.stack)));
                     history.latestError = {
-                        message: error_1.message,
+                        message: error_2.message,
                         failedAt: new Date().toISOString(),
                         migrationVersion: currentVersion
                     };
@@ -364,7 +382,7 @@ exports.default = (function () {
         .description('reset the all migrations')
         .option('-v, --verbose', 'show scripts committed')
         .action(function (cmd) { return __awaiter(_this, void 0, void 0, function () {
-        var history, currentVersion, config, environment, databaseConfig, migrations, database, _i, migrations_2, migration, transaction, create, alter, drop, seed, truncate, execute, error_2;
+        var history, currentVersion, config, environment, databaseConfig, migrations, database, _i, migrations_3, migration, transaction, create, alter, drop, seed, truncate, execute, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -394,11 +412,11 @@ exports.default = (function () {
                         return [2 /*return*/];
                     }
                     database = database_1.default.use(databaseConfig.protocol, databaseConfig);
-                    _i = 0, migrations_2 = migrations;
+                    _i = 0, migrations_3 = migrations;
                     _a.label = 2;
                 case 2:
-                    if (!(_i < migrations_2.length)) return [3 /*break*/, 6];
-                    migration = migrations_2[_i];
+                    if (!(_i < migrations_3.length)) return [3 /*break*/, 6];
+                    migration = migrations_3[_i];
                     currentVersion = migration.version();
                     console.log(chalk_1.default.blue("[INFO] Reverting migration " + chalk_1.default.yellow(migration.version()) + "..."));
                     transaction = new database.Transaction();
@@ -432,11 +450,11 @@ exports.default = (function () {
                     console.log(chalk_1.default.blue("[INFO] Reverted " + migrations.length + " migration/s!"));
                     return [3 /*break*/, 8];
                 case 7:
-                    error_2 = _a.sent();
+                    error_3 = _a.sent();
                     console.log();
-                    console.error(chalk_1.default.red(common_tags_1.stripIndents(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n                    [FAIL] Could not revert migrations: ", "\n                    ", "\n                "], ["\n                    [FAIL] Could not revert migrations: ", "\n                    ", "\n                "])), error_2.message, error_2.stack)));
+                    console.error(chalk_1.default.red(common_tags_1.stripIndents(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n                    [FAIL] Could not revert migrations: ", "\n                    ", "\n                "], ["\n                    [FAIL] Could not revert migrations: ", "\n                    ", "\n                "])), error_3.message, error_3.stack)));
                     history.latestError = {
-                        message: error_2.message,
+                        message: error_3.message,
                         failedAt: new Date().toISOString(),
                         migrationVersion: currentVersion
                     };

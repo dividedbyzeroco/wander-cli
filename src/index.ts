@@ -181,56 +181,56 @@ export default () => {
 
                 // Get migrations
                 const migrations = getPendingMigrations(config.migrationsDir);
-                
-                // // Connect to the database
-                // const database = Database.use(databaseConfig.protocol, databaseConfig);
 
-                // // Update history
-                // if(migrations.length > 0)
-                //     history.updatedAt = new Date().toISOString();
-                // else {
-                //     // End
-                //     console.log(chalk.blue(`[INFO] No pending migrations. Try ${chalk.yellow('wander new <name>')} to create a new one.`));
-                //     console.log();
-                //     process.exit();
-                //     return;
-                // }
+                // Connect to the database
+                const database = Database.use(databaseConfig.protocol, databaseConfig);
 
-                // // Run migration commits
-                // for(let migration of migrations) {
-                //     currentVersion = migration.version();
-                //     console.log(chalk.blue(`[INFO] Committing migration ${chalk.yellow(migration.version())}...`));
+                // Update history
+                if(migrations.length > 0)
+                    history.updatedAt = new Date().toISOString();
+                else {
+                    // End
+                    console.log(chalk.blue(`[INFO] No pending migrations. Try ${chalk.yellow('wander new <name>')} to create a new one.`));
+                    console.log();
+                    process.exit();
+                    return;
+                }
 
-                //     // Prepare transaction
-                //     const transaction = new database.Transaction();
-                //     const { create, alter, drop, seed, truncate, execute } = transaction;
+                // Run migration commits
+                for(let migration of migrations) {
+                    currentVersion = migration.version();
+                    console.log(chalk.blue(`[INFO] Committing migration ${chalk.yellow(migration.version())}...`));
 
-                //     // Prepare transaction
-                //     await migration.up({ create, alter, drop, seed, truncate, execute });
-                //     transaction.commit();
+                    // Prepare transaction
+                    const transaction = new database.Transaction();
+                    const { create, alter, drop, seed, truncate, execute } = transaction;
 
-                //     // Show transaction
-                //     if(cmd.verbose || cmd.dryrun) {
-                //         console.log();
-                //         console.log(chalk.yellow(transaction.toString()));
-                //         console.log();
-                //     }
+                    // Prepare transaction
+                    await migration.up({ create, alter, drop, seed, truncate, execute });
+                    transaction.commit();
 
-                //     if(!cmd.dryrun) {
-                //         // Run transaction
-                //         await database.query(transaction.toString());    
-                //         console.log(chalk.green(`[DONE] Successfully committed migration ${chalk.yellow(migration.version())}.`));
+                    // Show transaction
+                    if(cmd.verbose || cmd.dryrun) {
+                        console.log();
+                        console.log(chalk.yellow(transaction.toString()));
+                        console.log();
+                    }
 
-                //         // Add migration to history
-                //         history.committed.push(migration.version());
-                //     }
-                //     else {
-                //         console.log(chalk.green(`[DONE] Successfully prepared migration ${chalk.yellow(migration.version())}.`));
-                //     }
+                    if(!cmd.dryrun) {
+                        // Run transaction
+                        await database.query(transaction.toString());    
+                        console.log(chalk.green(`[DONE] Successfully committed migration ${chalk.yellow(migration.version())}.`));
 
-                //     // Increase committed
-                //     committed++;
-                // }
+                        // Add migration to history
+                        history.committed.push(migration.version());
+                    }
+                    else {
+                        console.log(chalk.green(`[DONE] Successfully prepared migration ${chalk.yellow(migration.version())}.`));
+                    }
+
+                    // Increase committed
+                    committed++;
+                }
             }
             catch(error) {
                 console.error(chalk.red(stripIndents`
