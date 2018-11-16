@@ -6,7 +6,7 @@ export default class KeyDefinition {
     _increments = false;
     _charset: string;
     _collation?: string;
-    _before?: string;
+    _first?: string;
     _after?: string;
 
     constructor(key: string, type: string) {
@@ -30,8 +30,8 @@ export default class KeyDefinition {
         return this;
     }
 
-    before(column: string) {
-        this._before = column;
+    first(column: string) {
+        this._first = column;
         return this;
     }
 

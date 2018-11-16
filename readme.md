@@ -325,7 +325,7 @@ You can also specify specific options for the alteration.
     - Determine whether the field should be nullable or not nullable
 + increments()
     - State that the field should auto-increment
-+ before(`column`?: string)
++ first(`column`?: string)
     - Determine the position of the column
 + after(`column`?: string)
     - Determine the position of the column

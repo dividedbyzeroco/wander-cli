@@ -227,7 +227,7 @@ class AlterStatement {
             key._increments? 'AUTO_INCREMENT': '',
             key._charset? `CHARSET ${key._charset}` : '',
             key._collation? `COLLATE ${key._collation}` : '',
-            key._before? `BEFORE ${this._client.escapeKey(key._before)}` : '',
+            key._first? `FIRST ${this._client.escapeKey(key._first)}` : '',
             key._after? `AFTER ${this._client.escapeKey(key._after)}` : ''
         ].join(' ').trim();
     }
