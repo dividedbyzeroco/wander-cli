@@ -108,6 +108,10 @@ export default class Table {
         return primary;
     }
 
+    pointerIndex(key: string, alias = key) {
+        return this.index(`${key}_${Keys.Id}`);
+    }
+
     index(key: string, alias = key) {
         const index = new IndexDefinition(key, alias);
         this._indexes.push(index);
