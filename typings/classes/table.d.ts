@@ -23,6 +23,7 @@ export default class Table {
     datetime(key: string): KeyDefinition;
     json(key: string): KeyDefinition;
     primary(key: string): PrimaryDefinition;
+    pointerIndex(key: string, alias?: string): IndexDefinition;
     index(key: string, alias?: string): IndexDefinition;
     unique(key: string, alias?: string): UniqueDefinition;
 }

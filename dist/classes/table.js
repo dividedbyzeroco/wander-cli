@@ -103,6 +103,10 @@ var Table = /** @class */ (function () {
         this._primary = primary;
         return primary;
     };
+    Table.prototype.pointerIndex = function (key, alias) {
+        if (alias === void 0) { alias = key; }
+        return this.index(key + "_" + constants_1.Keys.Id);
+    };
     Table.prototype.index = function (key, alias) {
         if (alias === void 0) { alias = key; }
         var index = new index_definition_1.default(key, alias);
