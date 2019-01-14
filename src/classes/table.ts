@@ -102,6 +102,12 @@ export default class Table {
         return keyDefinition;
     }
 
+    char(key: string, length: number = 30) {
+        const keyDefinition = new KeyDefinition(key, `char(${length})`);
+        this._keys.push(keyDefinition);
+        return keyDefinition;
+    }
+
     primary(key: string) {
         const primary = new PrimaryDefinition(key);
         this._primary = primary;
