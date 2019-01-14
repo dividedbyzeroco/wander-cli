@@ -294,6 +294,8 @@ __Methods__
     - Adds a boolean column (e.g. on MySQL this is equivalent to `bit`)
 + json(`columnName`: string)
     - Supported in `MySQL 5.7+`
++ char(`columnName`: string, `length`?: number)
+    - Adds a char data type column
 + timestamps()
     - Creates `created_at`, `updated_at` and `deleted_at` datetime columns
 + index(`columnName`: string, `alias`?: string)

@@ -22,6 +22,7 @@ export default class Table {
     date(key: string): KeyDefinition;
     datetime(key: string): KeyDefinition;
     json(key: string): KeyDefinition;
+    char(key: string, length?: number): KeyDefinition;
     primary(key: string): PrimaryDefinition;
     pointerIndex(key: string, alias?: string): IndexDefinition;
     index(key: string, alias?: string): IndexDefinition;
