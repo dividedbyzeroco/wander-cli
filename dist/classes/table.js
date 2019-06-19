@@ -98,6 +98,12 @@ var Table = /** @class */ (function () {
         this._keys.push(keyDefinition);
         return keyDefinition;
     };
+    Table.prototype.char = function (key, length) {
+        if (length === void 0) { length = 30; }
+        var keyDefinition = new key_definition_1.default(key, "char(" + length + ")");
+        this._keys.push(keyDefinition);
+        return keyDefinition;
+    };
     Table.prototype.primary = function (key) {
         var primary = new primary_definition_1.default(key);
         this._primary = primary;
@@ -105,7 +111,7 @@ var Table = /** @class */ (function () {
     };
     Table.prototype.pointerIndex = function (key, alias) {
         if (alias === void 0) { alias = key; }
-        return this.index(key + "_" + constants_1.Keys.Id);
+        return this.index(key + "_" + constants_1.Keys.Id, alias);
     };
     Table.prototype.index = function (key, alias) {
         if (alias === void 0) { alias = key; }
