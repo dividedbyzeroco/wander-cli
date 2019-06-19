@@ -115,7 +115,7 @@ export default class Table {
     }
 
     pointerIndex(key: string, alias = key) {
-        return this.index(`${key}_${Keys.Id}`);
+        return this.index(`${key}_${Keys.Id}`, alias);
     }
 
     index(key: string, alias = key) {

@@ -283,9 +283,6 @@ __Methods__
     - Adds a decimal column
 + double(`columnName`: string, `length`?: number, `precision`?: number)
     - Adds a double column
-+ pointer(`tableName`: string, `via`?: string)
-    - Adds an integer column pointing to another table
-    - `via`, by default, is `tableName`_`id`
 + date(`columnName`: string)
     - Adds a date column
 + datetime(`columnName`: string)
